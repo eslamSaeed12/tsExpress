@@ -7,6 +7,6 @@ export class adminsGuard implements HttpGuard {
     res: Response,
     next: NextFunction
   ): boolean | Promise<boolean> {
-    return false;
+    return true;
   }
 }

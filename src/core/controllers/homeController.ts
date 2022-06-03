@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { controller } from "../../vendor/controller";
 import { route } from "../../vendor/route";
-import { resourceSetterPipe } from "../pipe/resource.pipe";
+import { loginBodyValidtor } from "../validators/login";
 
 export class adminsController extends controller {
   home(req, res, next) {
@@ -9,7 +9,11 @@ export class adminsController extends controller {
   }
 
   private assignRoutes() {
-    this.addRoute(new route(this.home).setPath("/").setMethod("get"));
+    this.addRoute(
+      new route(this.home).setPath("/").setMethod("get").setValidaionRule({
+        query: loginBodyValidtor,
+      })
+    );
   }
 
   private dispatchRoutes() {

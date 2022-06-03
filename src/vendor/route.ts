@@ -5,6 +5,15 @@ import { HttpGates } from "./gate";
 import { HttpGuard } from "./guard";
 import { Middleware } from "./middleware";
 import { Unauthorized } from "http-errors";
+import {
+  ClassConstructor,
+  classToPlain,
+  instanceToPlain,
+  plainToClass,
+  plainToInstance,
+} from "class-transformer";
+import { validate, validateOrReject, ValidatorOptions } from "class-validator";
+import { validationSchema } from "./validation";
 
 export class route {
   private path: string;
@@ -13,6 +22,8 @@ export class route {
   private middlewares: Middleware[];
   private guards: HttpGuard[];
   private filters: HttpFilter[];
+  private validationRule: validationSchema;
+  private validationOptions: ValidatorOptions;
   private handler: (
     req: Request,
     res: Response,
@@ -58,6 +69,12 @@ export class route {
 
   setGuard(guard: HttpGuard) {
     this.guards.push(guard);
+    return this;
+  }
+
+  setValidaionRule(schema_: validationSchema, opts?: ValidatorOptions) {
+    this.validationRule = schema_;
+    this.validationOptions = opts;
     return this;
   }
 
@@ -107,6 +124,45 @@ export class route {
 
           if (!canPass) {
             throw new Unauthorized();
+          }
+
+          // doing the validation here and throw error if validation failed
+
+          if (this.validationRule) {
+            const rules = [
+              {
+                rules: this.validationRule.body,
+                target: "body",
+              },
+              {
+                rules: this.validationRule.query,
+                target: "query",
+              },
+              {
+                rules: this.validationRule.params,
+                target: "params",
+              },
+              {
+                rules: this.validationRule.headers,
+                target: "headers",
+              },
+              {
+                rules: this.validationRule.cookies,
+                target: "cookies",
+              },
+              {
+                rules: this.validationRule.session,
+                target: "session",
+              },
+            ];
+
+            for (const rule of rules) {
+              if (rule.rules) {
+                const plain =
+                  plainToInstance(rule.rules, req[rule.target]) || {};
+                await validateOrReject(plain, this.validationOptions);
+              }
+            }
           }
 
           // dispatch handler

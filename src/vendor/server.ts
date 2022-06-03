@@ -1,5 +1,5 @@
 import { Express, Router } from "express";
-import { httpFilter } from "../errors/http.filter";
+import { httpFilter } from "../filters/http.filter";
 import { Middleware } from "./middleware";
 
 interface IServerBootstraper {
