@@ -4,6 +4,7 @@ import { HttpFilter } from "./filter";
 import { HttpGates } from "./gate";
 import { HttpGuard } from "./guard";
 import { Middleware } from "./middleware";
+import { Unauthorized } from "http-errors";
 
 export class route {
   private path: string;
@@ -105,20 +106,19 @@ export class route {
           }
 
           if (!canPass) {
-            throw new Error("Unauthorized");
+            throw new Unauthorized();
           }
 
           // dispatch handler
           await this.handler.bind(this, req, res, next)();
         } catch (err) {
-          if (this.filters.length > 0) {
-            for (const filter of this.filters) {
-              await filter.catch.bind(filter, err, req, res, next)();
-            }
-
-            return;
+          if (!this.filters.length) {
+            return next(err);
           }
-          next(err);
+
+          for (const filter of this.filters) {
+            await filter.catch.bind(filter, err, req, res, next)();
+          }
         }
       }
     );

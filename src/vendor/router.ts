@@ -1,4 +1,5 @@
 import { Router } from "express";
+import {Unauthorized} from "http-errors";
 import { controller } from "./controller";
 import { HttpFilter } from "./filter";
 import { HttpGuard } from "./guard";
@@ -40,22 +41,22 @@ export class wildRoute {
 
   dispatch() {
     this.router.use(async (req, res, next) => {
-      for await (let m of this.middlewares) {
+      for (let m of this.middlewares) {
         await m.use.bind(m, req, res, next)();
       }
 
-      for await (let p of this.pipes) {
+      for (let p of this.pipes) {
         await p.transform.bind(p, req)();
       }
 
       let canPass = true;
 
-      for await (let g of this.guards) {
+      for (let g of this.guards) {
         canPass = await g.guard.bind(g, req, res, next)();
       }
 
       if (!canPass) {
-        next(new Error("Access Denied"));
+        next(new Unauthorized);
       }
 
       next();

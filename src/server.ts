@@ -10,6 +10,8 @@ import hpp from "hpp";
 import { env } from "./helpers/env";
 import { logger } from "./helpers/Logger";
 import xss from "xss-clean";
+import morgan from "morgan";
+import { httpFilter } from "./errors/http.filter";
 
 // ---------------------- variables area ----------------------
 const app = express();
@@ -24,6 +26,7 @@ server.setMiddleware({ use: bodyParser.json() });
 server.setMiddleware({ use: bodyParser.urlencoded({ extended: false }) });
 server.setMiddleware({ use: cors({ origin: "*" }) });
 server.setMiddleware({ use: hpp() });
+server.setMiddleware({ use: morgan("dev") });
 // server.setMiddleware({ use: csurf({ cookie: true }) });
 server.setMiddleware({ use: express.static(process.cwd() + "/public") });
 server.setMiddleware({ use: xss() });
@@ -31,6 +34,12 @@ server.setMiddleware({ use: xss() });
 // ------------------- routes area ---------------------
 server.setRouter(adminRouter.getRouter(), adminRouter.getPerfix());
 // -------------------------------------
+
+// ---------- filters --------------------
+
+server.setFilter(new httpFilter());
+
+// ----------------------------------------
 
 // ---------------------- start server ----------------------
 server.serve({

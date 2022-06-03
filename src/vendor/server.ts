@@ -1,4 +1,5 @@
 import { Express, Router } from "express";
+import { httpFilter } from "../errors/http.filter";
 import { Middleware } from "./middleware";
 
 interface IServerBootstraper {
@@ -17,6 +18,10 @@ export class ExpressServer {
 
   public setMiddleware(mid: Middleware) {
     this.app.use(mid.use.bind(mid));
+  }
+
+  public setFilter(filter: httpFilter) {
+    this.app.use(filter.catch.bind(filter));
   }
 
   public async serve({
