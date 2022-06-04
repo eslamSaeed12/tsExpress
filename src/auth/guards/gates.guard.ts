@@ -1,5 +1,5 @@
-import { HttpGates } from "../../vendor/gate";
-import { HttpGuard } from "../../vendor/guard";
+import { HttpGates } from "../../vendor/@Granter";
+import { HttpGuard } from "../../vendor/@HttpGuard";
 
 export class gatesGuard implements HttpGuard {
   guard(req: Request): boolean | Promise<boolean> {

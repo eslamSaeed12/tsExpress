@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { route } from "./route";
+import { route } from "../@Route";
 
-export abstract class controller {
+export abstract class Controller {
   protected routes: route[];
   private router: Router;
 

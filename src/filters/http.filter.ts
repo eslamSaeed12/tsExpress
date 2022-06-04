@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { HttpFilter } from "../vendor/filter";
+import { HttpFilter } from "../vendor/@HttpFilter";
 import { isHttpError } from "http-errors";
 
 export class httpFilter extends HttpFilter {

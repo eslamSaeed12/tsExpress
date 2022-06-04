@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { adminsGuard } from "../../auth/guards/admins.guard";
-import { routerModule, wildRoute } from "../../vendor/routerModule";
+import { routerModule, wildRoute } from "../../vendor/@RouterModule";
 import { adminsController } from "../controllers/homeController";
 import { resourceSetterPipe } from "../pipe/resource.pipe";
 

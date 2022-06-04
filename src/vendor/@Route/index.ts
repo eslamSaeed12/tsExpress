@@ -1,13 +1,13 @@
 import { NextFunction, Response, Request, Router } from "express";
-import { Pipe } from "./pipe";
-import { HttpFilter } from "./filter";
-import { HttpGates } from "./gate";
-import { HttpGuard } from "./guard";
-import { Middleware } from "./middleware";
+import { Pipe } from "../@HttpPipe";
+import { HttpFilter } from "../@HttpFilter";
+import { HttpGates } from "../@Granter";
+import { HttpGuard } from "../@HttpGuard";
+import { Middleware } from "../@HttpMiddleware";
 import { Unauthorized } from "http-errors";
 import { plainToInstance } from "class-transformer";
 import { validateOrReject, ValidatorOptions } from "class-validator";
-import { validationSchema } from "./validation";
+import { IHttpValidationSchema } from "../@typings/IHttpValidationSchema";
 
 export class route {
   private path: string;
@@ -16,7 +16,7 @@ export class route {
   private middlewares: Middleware[];
   private guards: HttpGuard[];
   private filters: HttpFilter[];
-  private validationRule: validationSchema;
+  private validationRule: IHttpValidationSchema;
   private validationOptions: ValidatorOptions;
   private handler: (
     req: Request,
@@ -59,7 +59,7 @@ export class route {
     return this;
   }
 
-  setValidaionRule(schema_: validationSchema, opts?: ValidatorOptions) {
+  setValidaionRule(schema_: IHttpValidationSchema, opts?: ValidatorOptions) {
     this.validationRule = schema_;
     this.validationOptions = opts;
     return this;

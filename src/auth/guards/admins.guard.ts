@@ -1,5 +1,5 @@
 import { NextFunction } from "express";
-import { HttpGuard } from "../../vendor/guard";
+import { HttpGuard } from "../../vendor/@HttpGuard";
 
 export class adminsGuard implements HttpGuard {
   guard(

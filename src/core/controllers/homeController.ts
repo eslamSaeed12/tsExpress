@@ -1,7 +1,7 @@
-import { controller } from "../../vendor/controller";
+import { Controller } from "../../vendor/@Controller";
 import { loginBodyValidtor } from "../validators/login";
 
-export class adminsController extends controller {
+export class adminsController extends Controller {
   home(req, res, next) {
     res.json(req.body);
   }

@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { Unauthorized } from "http-errors";
-import { controller } from "./controller";
-import { HttpFilter } from "./filter";
-import { HttpGuard } from "./guard";
-import { Middleware } from "./middleware";
-import { Pipe } from "./pipe";
+import { Controller } from "../@Controller";
+import { HttpFilter } from "../@HttpFilter";
+import { HttpGuard } from "../@HttpGuard";
+import { Middleware } from "../@HttpMiddleware";
+import { Pipe } from "../@HttpPipe";
 
 export class wildRoute {
   private middlewares: Array<Middleware>;
@@ -79,7 +79,7 @@ export class wildRoute {
 }
 
 export class routerModule {
-  private controllers: Array<controller>;
+  private controllers: Array<Controller>;
   private wildRoute?: wildRoute;
   private prefix: string;
   private router: Router;
@@ -108,11 +108,11 @@ export class routerModule {
     }
   }
 
-  public addController(controller: controller) {
+  public addController(controller: Controller) {
     this.controllers.push(controller);
   }
 
-  public setControllers(controllers: Array<controller>) {
+  public setControllers(controllers: Array<Controller>) {
     this.controllers = controllers;
   }
 

@@ -1,4 +1,4 @@
-import { Pipe } from "../../vendor/pipe";
+import { Pipe } from "../../vendor/@HttpPipe";
 
 export class resourceSetterPipe extends Pipe {
   public transform(req: Request): void | Promise<void> {

@@ -1,6 +1,6 @@
 import { Express, Router } from "express";
-import { httpFilter } from "../filters/http.filter";
-import { Middleware } from "./middleware";
+import { httpFilter } from "../../filters/http.filter";
+import { Middleware } from "../@HttpMiddleware";
 
 interface IServerBootstraper {
   beforeBootstrap?: (app: Express) => Promise<void> | void;
