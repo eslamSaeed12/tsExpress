@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {Unauthorized} from "http-errors";
+import { Unauthorized } from "http-errors";
 import { controller } from "./controller";
 import { HttpFilter } from "./filter";
 import { HttpGuard } from "./guard";
@@ -11,12 +11,18 @@ export class wildRoute {
   private pipes: Array<Pipe>;
   private filters: Array<HttpFilter>;
   private guards: Array<HttpGuard>;
+  private router: Router;
 
-  constructor(private router: Router) {
+  constructor() {
     this.middlewares = [];
     this.pipes = [];
     this.filters = [];
     this.guards = [];
+  }
+
+  setRouter(router: Router) {
+    this.router = router;
+    return this;
   }
 
   setMiddleware(middleware: Middleware) {
@@ -56,7 +62,7 @@ export class wildRoute {
       }
 
       if (!canPass) {
-        next(new Unauthorized);
+        next(new Unauthorized());
       }
 
       next();
@@ -72,25 +78,46 @@ export class wildRoute {
   }
 }
 
-export class router {
-  constructor(private router: Router, private prefix?: string) {}
+export class routerModule {
+  private controllers: Array<controller>;
+  private wildRoute?: wildRoute;
+  private prefix: string;
+  private router: Router;
 
-  dispatch(controllers: Array<controller>, wild?: wildRoute) {
-    if (wild) {
-      wild.dispatch();
+  constructor() {
+    this.controllers = [];
+  }
+
+  dispatch() {
+    if (this.wildRoute) {
+      this.wildRoute.dispatch();
     }
 
-    controllers.forEach((controller) => {
+    this.controllers.forEach((controller) => {
       controller.bootstrap();
     });
 
     // filters
 
-    if (wild) {
-      wild
+    if (this.wildRoute) {
+      this.wildRoute
         .getFilters()
-        .forEach((filter) => wild.getRouter().use(filter.catch.bind(filter)));
+        .forEach((filter) =>
+          this.wildRoute.getRouter().use(filter.catch.bind(filter))
+        );
     }
+  }
+
+  public addController(controller: controller) {
+    this.controllers.push(controller);
+  }
+
+  public setControllers(controllers: Array<controller>) {
+    this.controllers = controllers;
+  }
+
+  public setWildRoute(wild: wildRoute) {
+    this.wildRoute = wild;
   }
 
   public getRouter() {
@@ -99,6 +126,10 @@ export class router {
 
   public setPerfix(prefix: string) {
     this.prefix = prefix;
+  }
+
+  public setRouter(router: Router) {
+    this.router = router;
   }
 
   public getPerfix() {

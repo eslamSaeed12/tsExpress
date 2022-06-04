@@ -1,14 +1,28 @@
 import { Router } from "express";
 import { adminsGuard } from "../../auth/guards/admins.guard";
-import { router, wildRoute } from "../../vendor/router";
+import { routerModule, wildRoute } from "../../vendor/routerModule";
 import { adminsController } from "../controllers/homeController";
 import { resourceSetterPipe } from "../pipe/resource.pipe";
 
-const adminModule = new router(Router(), "/admin");
+const adminModule = new routerModule();
+const adminController_ = new adminsController();
+const adminWildcard = new wildRoute();
 
-const controllers = [new adminsController(adminModule.getRouter())];
 
-const adminWildcard = new wildRoute(adminModule.getRouter());
+// module -- initalization
+adminModule.setRouter(Router());
+
+adminModule.setPerfix("/admin");
+
+// controllers  setting their router from the module
+adminController_.setRouter(adminModule.getRouter());
+
+adminModule.addController(adminController_);
+
+
+adminWildcard.setRouter(adminModule.getRouter());
+
+adminModule.setWildRoute(adminWildcard);
 
 adminWildcard.setPipe(new resourceSetterPipe());
 
@@ -16,6 +30,6 @@ adminWildcard.setGuard(new adminsGuard());
 
 adminWildcard.dispatch();
 
-adminModule.dispatch(controllers, adminWildcard);
+adminModule.dispatch();
 
 export { adminModule as adminRouter };

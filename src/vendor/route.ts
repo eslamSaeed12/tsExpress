@@ -5,14 +5,8 @@ import { HttpGates } from "./gate";
 import { HttpGuard } from "./guard";
 import { Middleware } from "./middleware";
 import { Unauthorized } from "http-errors";
-import {
-  ClassConstructor,
-  classToPlain,
-  instanceToPlain,
-  plainToClass,
-  plainToInstance,
-} from "class-transformer";
-import { validate, validateOrReject, ValidatorOptions } from "class-validator";
+import { plainToInstance } from "class-transformer";
+import { validateOrReject, ValidatorOptions } from "class-validator";
 import { validationSchema } from "./validation";
 
 export class route {
@@ -32,18 +26,11 @@ export class route {
 
   private gates: HttpGates[];
 
-  constructor(
-    handler: (
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ) => Promise<void> | void
-  ) {
+  constructor() {
     this.pipes = [];
     this.middlewares = [];
     this.guards = [];
     this.filters = [];
-    this.handler = handler;
     this.gates = [];
   }
 
@@ -187,6 +174,6 @@ export class route {
       next: NextFunction
     ) => Promise<void> | void
   ) {
-    return new route(handler);
+    return new route();
   }
 }
