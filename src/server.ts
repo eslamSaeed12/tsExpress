@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { ExpressServer } from "./vendor/@Server";
 import express from "express";
-import { adminRouter } from "./core/modules/admin.router";
+import { homeModule } from "./http/modules/admin.router";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -37,7 +37,7 @@ async function main() {
   server.setMiddleware({ use: xss() });
 
   // ------------------- routes area ---------------------
-  server.setRouter(adminRouter.getRouter(), adminRouter.getPerfix());
+  server.setRouter(homeModule.getRouter(), homeModule.getPerfix());
 
   // ---------- filters --------------------
 
