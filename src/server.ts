@@ -13,12 +13,17 @@ import xss from "xss-clean";
 import morgan from "morgan";
 import { httpFilter } from "./filters/http.filter";
 import { validationFilter } from "./filters/validation.filter";
+import { dbConnection } from "./database/db";
 
 // ---------------------- variables area ----------------------
 const app = express();
 const server = new ExpressServer(app);
 
 async function main() {
+  // ------------- connect to the database -------------
+
+  await dbConnection();
+
   // ---------------------- middlewares area ----------------------
 
   server.setMiddleware({ use: helmet() });

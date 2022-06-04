@@ -8,12 +8,21 @@ export class adminsController extends controller {
     res.json(req.body);
   }
 
+  pride(req, res, next) {
+    res.json(req["originalUrl"]);
+  }
+
   private assignRoutes() {
-    this.addRoute(
-      new route(this.home).setPath("/").setMethod("get").setValidaionRule({
-        query: loginBodyValidtor,
-      })
-    );
+    this.route(this.home).setPath("/").setMethod("get").setValidaionRule({
+      query: loginBodyValidtor,
+    });
+
+    this.route(this.pride).setMethod("get").setPath("/pride");
+  }
+
+  route(handler: (req, res, next) => void | Promise<void>) {
+    this.routes.push(new route(handler));
+    return this.routes[this.routes.length - 1];
   }
 
   private dispatchRoutes() {
@@ -26,6 +35,6 @@ export class adminsController extends controller {
   }
 
   constructor(private router: Router) {
-    super();
+    super(router);
   }
 }

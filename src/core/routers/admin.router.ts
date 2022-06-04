@@ -4,11 +4,11 @@ import { router, wildRoute } from "../../vendor/router";
 import { adminsController } from "../controllers/homeController";
 import { resourceSetterPipe } from "../pipe/resource.pipe";
 
-const route = new router(Router(), "/admin");
+const adminModule = new router(Router(), "/admin");
 
-const controllers = [new adminsController(route.getRouter())];
+const controllers = [new adminsController(adminModule.getRouter())];
 
-const adminWildcard = new wildRoute(route.getRouter());
+const adminWildcard = new wildRoute(adminModule.getRouter());
 
 adminWildcard.setPipe(new resourceSetterPipe());
 
@@ -16,6 +16,6 @@ adminWildcard.setGuard(new adminsGuard());
 
 adminWildcard.dispatch();
 
-route.dispatch(controllers, adminWildcard);
+adminModule.dispatch(controllers, adminWildcard);
 
-export const adminRouter = route;
+export { adminModule as adminRouter };

@@ -1,9 +1,10 @@
+import { Router } from "express";
 import { route } from "./route";
 
 export abstract class controller {
   protected routes: route[];
 
-  constructor() {
+  constructor(router: Router) {
     this.routes = [];
   }
 
@@ -16,5 +17,4 @@ export abstract class controller {
   protected addRoute(route: route) {
     this.routes.push(route);
   }
- 
 }

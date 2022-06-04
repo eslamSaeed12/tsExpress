@@ -41,6 +41,7 @@
     "ioredis": "^4.28.3",
     "jest": "^27.4.7",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.5",
     "morgan": "^1.10.0",
     "node-schedule": "^2.1.0",
     "reflect-metadata": "^0.1.13",
