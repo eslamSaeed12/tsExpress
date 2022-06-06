@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { ExpressServer } from "./vendor/@Server";
 import express from "express";
-import { homeModule } from "./http/modules/admin.router";
+import { homeModule } from "./http/modules/home.module";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cors from "cors";
